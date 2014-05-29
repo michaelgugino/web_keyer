@@ -1,6 +1,8 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
 from database import db_session
+
+
 #from models import State, City
 
 #Uncomment below for Memcached
@@ -54,4 +56,6 @@ def index():
     
     #flash('New entry was successfully posted')
     return render_template('index.html')
+
+
 
