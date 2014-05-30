@@ -1,9 +1,11 @@
 from flask import request, session, g, redirect, url_for, abort, render_template, flash
 from flask.views import MethodView
 
-from models import User
+from models import User,KeyingTask
 import cache_methods
 cache = cache_methods.cache
+
+from database import db_session
 
 class KeyerView(MethodView):
     #get is the default method for entering the keying page.
@@ -39,8 +41,10 @@ class KeyerView(MethodView):
                 flash('There are no valid keying tasks at this time, please check back later')
                 return render_template('index.html')
             cache.set(str(myid)+':current_task',my_current_task,)
-    
-        
+        my_current_task = db_session.merge(my_current_task)
+        my_current_task.png = '/static/images/demo2.png'
+        db_session.commit()
+        flash("Resuming Previous keying task, id: " + str(my_current_task.kt_id))
         return render_template('key.html')
 
     def post(self):
