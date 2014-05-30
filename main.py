@@ -5,6 +5,7 @@ import views, config
 app = Flask(__name__)
 app.config.from_object('config.Config')
 app.add_url_rule('/', view_func=views.index)
+app.add_url_rule('/users/<user_id>/', view_func=views.users)
 #app.add_url_rule('/key', view_func=views.key)
 #app.add_url_rule('/audit', view_func=views.audit)
 #app.add_url_rule('/admin', view_func=views.admin)
