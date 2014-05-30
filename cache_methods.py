@@ -38,7 +38,7 @@ def cacheGetAKeyingTask(userid):
         if res.firstkeyer == 0 or res.firstkeyer is None:
             res.firstpass = 1
             res.firstkeyer = userid
-        elif (res.secondkeyer == 0 or res.secondkeyer) and res.firstkeyer != userid is None:
+        elif (res.secondkeyer == 0 or res.secondkeyer is None) and res.firstkeyer != userid:
             res.secondpass = 1
             res.secondkeyer = userid
             
