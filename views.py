@@ -5,6 +5,8 @@ import cache_methods
 cache = cache_methods.cache
 
 
+from database import db_session
+
 
 
 
@@ -48,12 +50,21 @@ def admin():
     
     return render_template('index.html')
 
-def add_user():
+def test():
     #Check username against cache
-    
+    my_new_user = User(name='m3', active=0)
+    db_session.add(my_new_user)
+    db_session.commit()
     # Check permissions
     return render_template('index.html')
 
-
+def test2():
+    #Check username against cache
+    my_new_user = db_session.query(User).filter_by(name='m2').first()
+    #my_new_user.update({"active": 5})
+    my_new_user.active = 3
+    db_session.commit()
+    # Check permissions
+    return render_template('index.html')
 
 

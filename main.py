@@ -5,6 +5,8 @@ import views, config
 app = Flask(__name__)
 app.config.from_object('config.Config')
 app.add_url_rule('/', view_func=views.index)
+app.add_url_rule('/test', view_func=views.test)
+app.add_url_rule('/test2', view_func=views.test2)
 app.add_url_rule('/users/<user_id>/', view_func=views.users)
 #app.add_url_rule('/key', view_func=views.key)
 #app.add_url_rule('/audit', view_func=views.audit)
@@ -20,6 +22,8 @@ auditview = AuditView.as_view('audit')
 app.add_url_rule('/audit', view_func=auditview, methods=['GET',], defaults={'user_id': None})
 adminview = AdminView.as_view('admin')
 app.add_url_rule('/admin', view_func=adminview, methods=['GET',], defaults={'user_id': None})
+
+
 
 
 from database import db_session

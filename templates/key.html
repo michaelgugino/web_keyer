@@ -1,15 +1,26 @@
-{% extends "main_header.html" %}
+{% extends "key_header.html" %}
 {% block body %}
-control bar
-<br />
-<br />
+<div class="controlbar">
+  <h1>eGT Web Based Keying Platform</h1>
 
+
+</div>
 <div id="two" >
-        <p>100vh Height</p>
-        <img class="img" src="http://2.bp.blogspot.com/-FCH3yHQ6Ea8/UX8nVBwQjfI/AAAAAAAAMgM/PBT01FCxVNc/s1600/Linux+Wallpapers+5.jpg">
+        <img id="image" src="/static/images/demo2.png" />
 		</img>
-      
+		
+		<script type="text/javascript">
+;(function($) {
+	$(document).ready(function() {
+		var $img = $("#image").imgViewer();
+	});
+})(jQuery);
+</script>
+
     	</div>
-<div class="footer">footer</div>
+<div class="footer">
+<h2><a href="{{ url_for('index') }}">Index</a></h2>
+
+</div>
 
 {% endblock %}

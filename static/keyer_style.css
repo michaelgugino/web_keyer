@@ -1,0 +1,42 @@
+body            { font-family: sans-serif; background-image:url('/static/images/grey_wash_wall.png'); margin: 0px;}
+a, h1, h2       { color: #377BA8; }
+h1, h2          { font-family: 'Georgia', serif; margin: 0; }
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+
+
+.flash          { background: #CEE5F5; padding: 0.5em;
+                  border: 1px solid #AACBE2; }
+.error          { background: #F0D6D6; padding: 0.5em; }
+
+img {
+
+   padding-left: 10px;
+   max-width: 95vw;
+   
+    
+}
+#two{
+margin-top: 50px;
+background-image:url('/static/images/grey_wash_wall.png');
+}
+.controlbar{
+	padding-left: 10px;
+    background-image:url('/static/images/paper_fibers.png');
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    z-index: 1;
+}
+.footer {
+    background-image:url('/static/images/paper_fibers.png');
+    position: fixed;
+    border-top-style:solid;
+    border-bottom-style:solid;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 50px;
+    height: 12vh;
+    z-index: 100;
+}  
