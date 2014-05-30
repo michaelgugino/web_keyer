@@ -33,6 +33,11 @@ class KeyerView(MethodView):
             #This should only be called once when the keyer enters for the day
             #or after a logout.
             my_current_task = cache_methods.cacheGetAKeyingTask(userid=myid)
+            
+            #if there's no task to get, then we will error.
+            if my_current_task is None:
+                flash('There are no valid keying tasks at this time, please check back later')
+                return render_template('index.html')
             cache.set(str(myid)+':current_task',my_current_task,)
     
         

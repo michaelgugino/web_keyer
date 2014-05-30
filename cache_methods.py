@@ -33,7 +33,7 @@ def cacheGetAKeyingTask(userid):
         
         #no keying tasks left
         if res is None:
-           abort(401, "No keying task could be found")
+           return None
            
         if res.firstkeyer == 0 or res.firstkeyer is None:
             res.firstpass = 1

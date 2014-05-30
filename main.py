@@ -32,7 +32,7 @@ adminview = AdminView.as_view('admin')
 app.add_url_rule('/admin', view_func=adminview, methods=['GET',], defaults={'user_id': None})
 
 
-
+ 
 
 from database import db_session
 from database import init_db
