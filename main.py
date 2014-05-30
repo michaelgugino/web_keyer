@@ -5,12 +5,20 @@ import views, config
 app = Flask(__name__)
 app.config.from_object('config.Config')
 app.add_url_rule('/', view_func=views.index)
-app.add_url_rule('/test', view_func=views.test)
-app.add_url_rule('/test2', view_func=views.test2)
+
 app.add_url_rule('/users/<user_id>/', view_func=views.users)
 #app.add_url_rule('/key', view_func=views.key)
 #app.add_url_rule('/audit', view_func=views.audit)
 #app.add_url_rule('/admin', view_func=views.admin)
+
+
+app.add_url_rule('/test', view_func=views.test)
+app.add_url_rule('/test2', view_func=views.test2)
+app.add_url_rule('/testdoc', view_func=views.testdoc)
+app.add_url_rule('/testkt', view_func=views.testkt)
+app.add_url_rule('/testdoctype', view_func=views.testdoctype)
+app.add_url_rule('/testfieldtype', view_func=views.testfieldtype)
+ 
 
 from KeyerView import KeyerView
 from AuditView import AuditView

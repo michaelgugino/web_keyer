@@ -29,10 +29,12 @@ class KeyerView(MethodView):
         my_current_task = cache.get(str(myid)+':current_task')
         
         if my_current_task is None:
-            #we don't have a task defined (ie, we didn't refresh.)
+            #we don't have a task defined (ie, we didn't refresh, or memcached died)
+            #This should only be called once when the keyer enters for the day
+            #or after a logout.
             my_current_task = cache_methods.cacheGetAKeyingTask(userid=myid)
             cache.set(str(myid)+':current_task',my_current_task,)
-        
+    
         
         return render_template('key.html')
 

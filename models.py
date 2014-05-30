@@ -53,7 +53,6 @@ class Recipient(Base):
 class Document(Base):
     __tablename__ = 'document'
     doc_id = Column(Integer, primary_key=True)
-    #state_id = Column(Integer, ForeignKey('state.id'))
     barcode = Column(String(50))
     image = Column(Text())
     doc_type = Column(Integer)
