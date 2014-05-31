@@ -15,33 +15,27 @@ class KeyerView(MethodView):
         #which is not defined right now.
         
         #testing
-        myid = cache.get('mgugino:id')
+        username='mgugino'
         
         #this will load cache with user_id; if
         #there is no active user_id, app
         #will fail to 401 unauthorized.
-        if myid is None:
-            myid = cache_methods.cacheGetUserID(username='mgugino')
-            cache.set('mgugino:id',myid,)
+        myid = cache_methods.cacheGetUserID(username=username)
         
         #Check permissions here
         
         #check to see if we already have a task we should be keying
         #otherwise, we need to fetch a task from the db.
-        my_current_task = cache.get(str(myid)+':current_task')
+        my_current_task = cache_methods.cacheGetAKeyingTask(userid=myid)
         
+        #if we still don't have a task, that means there's nothing to key
+        #at the moment.
         if my_current_task is None:
-            #we don't have a task defined (ie, we didn't refresh, or memcached died)
-            #This should only be called once when the keyer enters for the day
-            #or after a logout.
-            my_current_task = cache_methods.cacheGetAKeyingTask(userid=myid)
+            flash('There are no valid keying tasks at this time, please check back later')
+            return render_template('index.html')
             
-            #if there's no task to get, then we will error.
-            if my_current_task is None:
-                flash('There are no valid keying tasks at this time, please check back later')
-                return render_template('index.html')
-            cache.set(str(myid)+':current_task',my_current_task,)
-            
+        #Turn task into a session object so we can update it, etc.
+        #For testing only at this point.    
         my_current_task = db_session.merge(my_current_task)
         
         #testing area
