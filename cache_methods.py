@@ -8,7 +8,7 @@ cache = SimpleCache()
 from flask import abort
 from sqlalchemy import exc, or_, and_
 from database import db_session
-from models import User, KeyingTask
+from models import User, KeyingTask, Recipient
 
 #Cache Functions
 def cacheGetUserID(username):
@@ -57,3 +57,13 @@ def cacheGetAKeyingTask(userid):
             db_session.commit()
             cache.set(str(userid)+':current_task',res,)
         return res
+    
+def cacheGetDict(resource):
+    res = db_session.query(globals()[resource]).filter_by(active=1).all()
+    mydict = {}
+    for item in res:
+        mydict[item.id] = item.lname + ', ' + item.fname
+    return mydict
+
+
+

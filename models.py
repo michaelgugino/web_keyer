@@ -35,7 +35,7 @@ class Recipient(Base):
     __tablename__ = 'recipient'
     id = Column(Integer, primary_key=True)
     lname = Column(String(50), unique=False, nullable=False)
-    fname = Column(String(50), unique=True)
+    fname = Column(String(50), unique=False)
     mname = Column(String(50), unique=False)
     address = Column(String(50), unique=False)
     active = Column(SmallInteger)

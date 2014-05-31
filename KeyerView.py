@@ -42,10 +42,14 @@ class KeyerView(MethodView):
         my_current_task.png = '/static/images/demo3.png'
         db_session.commit()
         cache.set(str(myid)+':current_task',my_current_task,)
-        flash("Resuming Previous keying task, id: " + str(my_current_task.png))
-        #testing area.
         
-        return render_template('key.html', kt=my_current_task)
+        #determine field type goes here
+        
+        #retrieve field resources
+        my_dict = cache_methods.cacheGetDict(resource='Recipient')
+        #flash(my_dict[1])
+        #return render_template('index.html')
+        return render_template('key.html', kt=my_current_task, auto_dict=my_dict)
 
     def post(self):
         return render_template('index.html')
