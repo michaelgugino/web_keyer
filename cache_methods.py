@@ -5,7 +5,7 @@
 #cache = MemcachedCache(['127.0.0.1:11211'])
 from werkzeug.contrib.cache import SimpleCache
 cache = SimpleCache()
-from flask import abort
+from flask import abort, flash
 from sqlalchemy import exc, or_, and_
 from database import db_session
 from models import User, KeyingTask, Recipient
@@ -58,11 +58,36 @@ def cacheGetAKeyingTask(userid):
             cache.set(str(userid)+':current_task',res,)
         return res
     
-def cacheGetDict(resource):
-    res = db_session.query(globals()[resource]).filter_by(active=1).all()
-    mydict = {}
-    for item in res:
-        mydict[item.id] = item.lname + ', ' + item.fname
+def cacheGetDict(fieldtype, resource, attributes):
+    '''Returns a dictionary object for use in auto_complete combobox on keying page.
+       fieldtype == the field type of the keying task.
+       resouce (case sensitive Model reference.  Ie, 'Recipient') == what table we're looking in.
+       attributes (array of strings)== what columns from that table do we want?
+       Since each field type might use a resource in a
+       different way, we are going to cache by dict:<fieldtype>
+       This ensure that if different field types use different
+       attributes from a resource, we will not interfere with
+       those objects.'''
+    #First, try to get our auto_complete dict from cache
+    mydict = cache.get('dict:'+str(fieldtype))
+    #flash(mydict)
+    if mydict is None:
+        res = db_session.query(globals()[resource]).filter_by(active=1).all()
+        if res is None:
+            abort(401, "invalid resource type")
+        mydict = {}
+        for item in res:
+            value = ''
+            skip = 1
+            for attr in attributes:
+                if skip == 0:
+                    value += str(getattr(item, attr, )) + ', '
+                if skip == 1:
+                     skip = 0
+            
+            #mydict[getattr(item, 'id',)] = getattr(item, 'lname', ) + ', ' + getattr(item, 'fname', ) + ', ' + getattr(item, 'mname', )
+            mydict[getattr(item, 'id',)] = value
+        cache.set('dict:'+str(fieldtype),mydict,)
     return mydict
 
 

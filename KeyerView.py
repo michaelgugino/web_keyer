@@ -44,9 +44,14 @@ class KeyerView(MethodView):
         cache.set(str(myid)+':current_task',my_current_task,)
         
         #determine field type goes here
+        #This information should go in fielddefs table.
+        resource='Recipient'
+        
+        #This information should go in res_ourcedefs table.
+        attributes=['id', 'lname', 'fname', 'mname']
         
         #retrieve field resources
-        my_dict = cache_methods.cacheGetDict(resource='Recipient')
+        my_dict = cache_methods.cacheGetDict(fieldtype=my_current_task.fieldtype_id, resource=resource, attributes=attributes)
         #flash(my_dict[1])
         #return render_template('index.html')
         return render_template('key.html', kt=my_current_task, auto_dict=my_dict)
