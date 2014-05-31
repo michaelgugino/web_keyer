@@ -20,6 +20,7 @@ def cacheGetUserID(username):
             abort(401, "You do not appear to be a valid user for this application")
         cache.set(username+':id',res.id,)
         myid = res.id
+    
     return myid
 
 def cacheGetAKeyingTask(userid):
@@ -35,7 +36,7 @@ def cacheGetAKeyingTask(userid):
             res = db_session.query(KeyingTask).filter(or_(and_(KeyingTask.secondpass==1, KeyingTask.secondkeyer == userid),and_(KeyingTask.firstpass==1, KeyingTask.firstkeyer == userid))).first()
             #Find a second pass keying job first.
             if res is None:
-                res = db_session.query(KeyingTask).with_lockmode('update').filter(or_(KeyingTask.secondkeyer == 0, KeyingTask.secondkeyer == None), KeyingTask.firstkeyer != userid).first()
+                res = db_session.query(KeyingTask).with_lockmode('update').filter(or_(KeyingTask.secondkeyer == 0, KeyingTask.secondkeyer == None), KeyingTask.firstkeyer != userid, KeyingTask.firstpass == 2).first()
         
             if res is None:
                  #Try to find something that hasn't been keyed yet
@@ -50,10 +51,15 @@ def cacheGetAKeyingTask(userid):
             if res.firstkeyer == 0 or res.firstkeyer is None:
                 res.firstpass = 1
                 res.firstkeyer = userid
-            elif (res.secondkeyer == 0 or res.secondkeyer is None) and res.firstkeyer != userid:
+                #set a cache key that identifies the task and what user is working it.
+                cache.set('keyingtask:'+str(res.kt_id)+':1',userid,)
+            elif res.firstkeyer == userid:
+                cache.set('keyingtask:'+str(res.kt_id)+':1',userid,)
+            #elif (res.secondkeyer == 0 or res.secondkeyer is None) and res.firstkeyer != userid:
+            else:
                 res.secondpass = 1
                 res.secondkeyer = userid
-            
+                cache.set('keyingtask:'+str(res.kt_id)+':2',userid,)
             db_session.commit()
             cache.set(str(userid)+':current_task',res,)
         return res

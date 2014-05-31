@@ -100,7 +100,13 @@ def testkt():
     new = KeyingTask()
     new.doc_id = 1
     new.fieldtype_id = 1
-    png = '/static/images/demo.png'
+    new.png = '/static/images/demo.png'
+    db_session.add(new)
+    db_session.commit()
+    new = KeyingTask()
+    new.doc_id = 1
+    new.fieldtype_id = 1
+    new.png = '/static/images/demo3.png'
     db_session.add(new)
     db_session.commit()
     return render_template('index.html')

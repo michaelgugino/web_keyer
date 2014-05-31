@@ -37,7 +37,7 @@ app.add_url_rule('/admin', view_func=adminview, methods=['GET',], defaults={'use
 from database import db_session
 from database import init_db
 
-#init_db()
+init_db()
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

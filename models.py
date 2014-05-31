@@ -157,3 +157,19 @@ class KeyingTask(Base):
     
     def __repr__(self):
         return '<Task ID %r>' % (self.kt_id)
+    
+class KeyingAnswer(Base):
+    __tablename__ = 'keyinganswer'
+    ka_id = Column(Integer, primary_key=True)
+    kt_id = Column(Integer, ForeignKey('keyingtask.kt_id'))
+    firstanswer = Column(Text)
+    secondanswer = Column(Text)
+    auditoranswer = Column(Text)
+    
+    def __init__(self, kt_id=None, firstanswer=None, secondanswer=None):
+        self.kt_id = kt_id
+        self.firstanswer = firstanswer
+        self.secondanswer = secondanswer
+    
+    def __repr__(self):
+        return '<Task ID %r>' % (self.kt_id)

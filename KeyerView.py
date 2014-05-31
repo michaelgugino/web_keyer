@@ -52,9 +52,9 @@ class KeyerView(MethodView):
         my_current_task = db_session.merge(my_current_task)
         
         #testing area
-        my_current_task.png = '/static/images/demo3.png'
-        db_session.commit()
-        cache.set(str(myid)+':current_task',my_current_task,)
+        #my_current_task.png = '/static/images/demo3.png'
+        #db_session.commit()
+        #cache.set(str(myid)+':current_task',my_current_task,)
         
         #determine field type goes here
         #This information should go in fielddefs table.
@@ -87,20 +87,66 @@ class KeyerView(MethodView):
         #will fail to 401 unauthorized.
         myid = cache_methods.cacheGetUserID(username=username)
         
-        # parse form
+        # Make sure our answer fields are all present from the form.
+        if (request.form.get('kt_id') is None or request.form.get('pass_number') is None or request.form.get('answer') is None):
+            abort(500, "Invalid form submitted.  If you continue to see this error, contact your administrator")
+            
+        # check cache for 'keyingtask:<kt_id>:<pass_number>' = <myid>
+        # This ensure's we're not keying a stale task, as well as preventing spoofing.
+        if (cache.get('keyingtask:'+str(request.form['kt_id'])+':'+str(request.form['pass_number'])) != myid):
+            # if no task / user_id match found in cache, exit to index.
+            cache.delete(str(myid)+':current_task')
+            flash("Invalid Keying Task Submitteda")
+            return render_template('index.html')
         
-        # check cache for 'task:<kt_id>:<pass_number>:<user_id>
-        
-        # if no task found in cache, exit to index.
         
         # if task was found, submit task to rabbitmq, unset user cache and task cache.
-        #cache.delete(str(userid)+':current_task')
+        #in testing, all that happens here.
         
+        #Ensure we have a current task in cache.
+        my_current_task = cache.get(str(myid)+':current_task')
+        if (my_current_task is None):
+            #No current task means we cannot procedure further.  Fall back to index.
+            cache.delete(str(myid)+':current_task')
+            flash("Invalid Keying Task Submitted")
+            return render_template('index.html')
+        #Task is valid, submit message to process results.
+        #-------------RabbitMQ part-----------------
+        #Testing: Make sure warm cache is implemented before offloading db update to rabbit.
+        my_current_task = db_session.merge(my_current_task)
+        if (request.form['pass_number'] == str(1)):
+            my_current_task.firstpass = 2
+        else:
+            flash(request.form['pass_number'])
+            my_current_task.secondpass = 2
+        db_session.commit()
+        
+        #-------------End RabbitMQ part-----------------
+        cache.delete(str(myid)+':current_task')
+        cache.delete('keyingtask:'+str(request.form['kt_id'])+':'+str(request.form['pass_number']))
         #get new task
+        my_current_task = cache_methods.cacheGetAKeyingTask(userid=myid)
+        if my_current_task is None:
+            flash('There are no valid keying tasks at this time, please check back later')
+            return render_template('index.html')
+        #testing area
+        #my_current_task.png = '/static/images/demo.png'
+        #db_session.commit()
+        #cache.set(str(myid)+':current_task',my_current_task,)
         
-        submitted_form = request.form['answer']
-        return submitted_form
-        return render_template('index.html')
+        #determine field type goes here
+        #This information should go in fielddefs table.
+        resource='Recipient'
+        
+        #This information should go in res_ourcedefs table.
+        attributes=['id', 'lname', 'fname', 'mname']
+        
+        #retrieve field resources
+        my_dict = cache_methods.cacheGetDict(fieldtype=my_current_task.fieldtype_id, resource=resource, attributes=attributes)
+        #flash(my_dict[1])
+        #return render_template('index.html')
+        
+        return render_template('key.html', kt=my_current_task, auto_dict=my_dict)
 
     def delete(self, user_id):
         if user_id is None:

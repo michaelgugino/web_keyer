@@ -20,7 +20,11 @@
     	</div>
 <div class="footer">
   <div class="footerblock">
-  <h2><a href="{{ url_for('index') }}">Index</a></h2>
+  <h2>Navigation</h2>
+  <ul>
+    <li>  <a href="{{ url_for('index') }}">Index</a> </li>
+    <li>  <a href="{{ url_for('audit') }}">Audit</a></li>
+  </ul>
   {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>
   {% endfor %}
@@ -34,6 +38,8 @@
 	<option value="{{k}}">{{v}}</option>
 	{% endfor %}
   </select>
+  <input type="hidden" name="kt_id" value="{{kt.kt_id}}"></input>
+  <input type="hidden" name="pass_number" value="{% if (kt.secondpass is none or kt.secondpass == 0): %}1{% else: %}2{% endif %}"></input>
   </form>
   </div>
   <div id="fb3" class="footerblock">
