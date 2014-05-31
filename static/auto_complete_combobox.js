@@ -7,7 +7,7 @@
  
         this.element.hide();
         this._createAutocomplete();
-        this._createShowAllButton();
+        //this._createShowAllButton();
       },
  
       _createAutocomplete: function() {
@@ -23,7 +23,8 @@
             delay: 0,
             minLength: 0,
             source: $.proxy( this, "_source" ),
-            position: { my : "right bottom", at: "right top" }
+            position: { my : "right bottom", at: "right top" },
+            mustMatch: true
           })
           .tooltip({
             tooltipClass: "ui-state-highlight"

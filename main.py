@@ -25,7 +25,7 @@ from AuditView import AuditView
 from AdminView import AdminView
 
 keyerview = KeyerView.as_view('key')
-app.add_url_rule('/key', view_func=keyerview, methods=['GET',], defaults={'user_id': None})
+app.add_url_rule('/key', view_func=keyerview, methods=['GET','POST'], defaults={'user_id': None})
 auditview = AuditView.as_view('audit')
 app.add_url_rule('/audit', view_func=auditview, methods=['GET',], defaults={'user_id': None})
 adminview = AdminView.as_view('admin')

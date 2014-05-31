@@ -8,9 +8,22 @@ cache = cache_methods.cache
 from database import db_session
 
 class KeyerView(MethodView):
-    #get is the default method for entering the keying page.
-    #we do not submit form data across get, only post.
+    '''
+        This class displays and controls
+        keying mode.
+    '''
     def get(self, user_id):
+        '''
+       "get" is the default method for entering the keying page.
+       We do not submit form data across get, only "post."
+       Here, we resume a previously started keying task
+       by checking cache.  This is in case the user closed
+       their browser or navigated away during a task.
+       If no task is found in cache, then we select a new task.
+       First, we select something that is on second pass not
+       keyed by the user.
+       If nothing, we select something that is on first pass.
+        '''
         #this would be for /key/<user_id>
         #which is not defined right now.
         
@@ -56,7 +69,37 @@ class KeyerView(MethodView):
         #return render_template('index.html')
         return render_template('key.html', kt=my_current_task, auto_dict=my_dict)
 
-    def post(self):
+    def post(self, user_id):
+        '''
+            This method is used for submission of keying data.
+            First, the submitted task id is check against the cache.
+            If the cache contains a keying task with the user's id,
+            then the form is submitted.  Otherwise, the user will
+            be redirected to the index page to log in again.  This
+            is to prevent stale data from being submitted.            
+        '''
+        
+        #testing
+        username='mgugino'
+        
+        #this will load cache with user_id; if
+        #there is no active user_id, app
+        #will fail to 401 unauthorized.
+        myid = cache_methods.cacheGetUserID(username=username)
+        
+        # parse form
+        
+        # check cache for 'task:<kt_id>:<pass_number>:<user_id>
+        
+        # if no task found in cache, exit to index.
+        
+        # if task was found, submit task to rabbitmq, unset user cache and task cache.
+        #cache.delete(str(userid)+':current_task')
+        
+        #get new task
+        
+        submitted_form = request.form['answer']
+        return submitted_form
         return render_template('index.html')
 
     def delete(self, user_id):

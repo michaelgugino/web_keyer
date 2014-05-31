@@ -26,16 +26,26 @@
   {% endfor %}
   </div>
   <div class="footerblock">
+  <form id="answerform" name="input" action={{ url_for('key') }} method="post">
   <h2>Type the answer:</h2>
-  <select id="combobox">
-    <option value="">Select one...</option>
+  <select id="combobox" name="answer">
+    <option value="badoption"></option>
 	{% for k,v in auto_dict.iteritems() %}
 	<option value="{{k}}">{{v}}</option>
 	{% endfor %}
   </select>
+  </form>
   </div>
-  <div class="footerblock">
+  <div id="fb3" class="footerblock">
   Additional instructions go here.<br> maybe even a reject button?
+  <script>
+$( "#answerform" ).submit(function( event ) {
+  if ( $("#combobox").val() === "badoption" ) {
+  event.preventDefault();
+  alert("Invalid Selection");
+  }
+});
+</script>
   </div>
 </div>
 
