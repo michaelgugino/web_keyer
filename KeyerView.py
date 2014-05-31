@@ -1,7 +1,7 @@
 from flask import request, session, g, redirect, url_for, abort, render_template, flash
 from flask.views import MethodView
 
-from models import User,KeyingTask
+from models import User,KeyingTask, KeyingAnswer
 import cache_methods
 cache = cache_methods.cache
 
@@ -116,9 +116,12 @@ class KeyerView(MethodView):
         my_current_task = db_session.merge(my_current_task)
         if (request.form['pass_number'] == str(1)):
             my_current_task.firstpass = 2
+            my_current_answer = KeyingAnswer(kt_id=request.form['kt_id'], firstanswer=request.form['answer'])
+            db_session.add(my_current_answer)
         else:
-            flash(request.form['pass_number'])
             my_current_task.secondpass = 2
+            my_current_answer =  db_session.query(KeyingAnswer).with_lockmode('update').filter(KeyingAnswer.kt_id == int(request.form['kt_id'])).first()
+            my_current_answer.secondanswer = request.form['answer']
         db_session.commit()
         
         #-------------End RabbitMQ part-----------------

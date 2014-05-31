@@ -52,7 +52,7 @@ def admin():
 
 def test():
     #Check username against cache
-    my_new_user = User(name='m3', active=0)
+    my_new_user = User(name='m3', active=1)
     db_session.add(my_new_user)
     db_session.commit()
     # Check permissions
