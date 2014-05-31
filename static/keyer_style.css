@@ -40,3 +40,12 @@ background-image:url('/static/images/grey_wash_wall.png');
     height: 12vh;
     z-index: 100;
 }  
+.footerblock {
+	width:calc(100% / 3);
+    display:inline-block;
+}
+#answerfield {
+	height: 50px;
+	width: 85%;
+	font-size:  40px;
+}

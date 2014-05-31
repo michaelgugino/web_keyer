@@ -6,7 +6,7 @@
 
 </div>
 <div id="two" >
-        <img id="image" src="/static/images/demo2.png" />
+        <img id="image" src={{ kt.png }} />
 		</img>
 		
 		<script type="text/javascript">
@@ -19,10 +19,43 @@
 
     	</div>
 <div class="footer">
-<h2><a href="{{ url_for('index') }}">Index</a></h2>
+  <div class="footerblock">
+  <h2><a href="{{ url_for('index') }}">Index</a></h2>
   {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>
   {% endfor %}
+  </div>
+  <div class="footerblock">
+  <h2>Type the answer:</h2>
+  <select id="combobox">
+    <option value="">Select one...</option>
+    <option value="ActionScript">ActionScript</option>
+    <option value="AppleScript">AppleScript</option>
+    <option value="Asp">Asp</option>
+    <option value="BASIC">BASIC</option>
+    <option value="C">C</option>
+    <option value="C++">C++</option>
+    <option value="Clojure">Clojure</option>
+    <option value="COBOL">COBOL</option>
+    <option value="ColdFusion">ColdFusion</option>
+    <option value="Erlang">Erlang</option>
+    <option value="Fortran">Fortran</option>
+    <option value="Groovy">Groovy</option>
+    <option value="Haskell">Haskell</option>
+    <option value="Java">Java</option>
+    <option value="JavaScript">JavaScript</option>
+    <option value="Lisp">Lisp</option>
+    <option value="Perl">Perl</option>
+    <option value="PHP">PHP</option>
+    <option value="Python">Python</option>
+    <option value="Ruby">Ruby</option>
+    <option value="Scala">Scala</option>
+    <option value="Scheme">Scheme</option>
+  </select>
+  </div>
+  <div class="footerblock">
+  
+  </div>
 </div>
 
 {% endblock %}

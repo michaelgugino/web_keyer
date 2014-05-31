@@ -41,11 +41,17 @@ class KeyerView(MethodView):
                 flash('There are no valid keying tasks at this time, please check back later')
                 return render_template('index.html')
             cache.set(str(myid)+':current_task',my_current_task,)
+            
         my_current_task = db_session.merge(my_current_task)
-        my_current_task.png = '/static/images/demo2.png'
+        
+        #testing area
+        my_current_task.png = '/static/images/demo3.png'
         db_session.commit()
-        flash("Resuming Previous keying task, id: " + str(my_current_task.kt_id))
-        return render_template('key.html')
+        cache.set(str(myid)+':current_task',my_current_task,)
+        flash("Resuming Previous keying task, id: " + str(my_current_task.png))
+        #testing area.
+        
+        return render_template('key.html', kt=my_current_task)
 
     def post(self):
         return render_template('index.html')
